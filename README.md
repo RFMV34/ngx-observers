@@ -1,27 +1,50 @@
-# NgxObserversApp
+# Ngx observers
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.18.
+Ngx observers is library to allow developer use Resize, Mutation and Intersection observer api like normal output events on some element.
 
-## Development server
+## Instalation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+`npm install ngx-observers --save`
 
-## Code scaffolding
+then add `NgxSimpleTextEditorModule` into module imports
+```typescript
+import {NgxObserversModule} from "ngx-observers";
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+@NgModule({
+// ...
+  imports: [
+    // ...
+    NgxObserversModule,
+    // ...
+  ],
+// ...
+})
+```
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **[ResizeDirective](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver/ResizeObserver)** - Allow observe resize event of given object
+```html
+<div (obsResize)="resize($event)" [obsOptions]="{box: 'content-box'}" #elem="directive">...</div>
+```
+- **[MutationDirective](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/MutationObserver)** - Allow observe DOM tree changes
+```html
+<div (obsMutation)="mutate($event)" [obsOptions]="{subtree: false}" #elem="directive">...</div>
+```
+- **[Intersection directive](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)** - Allow observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport
+```html
+<div (obsIntersection)="intersect($event)" [obsOptions]="{threshold: 0.5}" #elem="directive">...</div>
+```
 
-## Running unit tests
+You can access directive original observer object (e.g. `this.obsResize.observer`) using template variables (`#elem="directive"`):
+```ts
+@ViewChild('elem') obsResize: ResizeDirective | undefined;
+@ViewChild('elem') obsMutation: MutationDirective | undefined;
+@ViewChild('elem') obsIntersection: IntersectionDirective | undefined;
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Documentation
+See http://www.ngx-observers.netlify.com
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# License
+MIT
